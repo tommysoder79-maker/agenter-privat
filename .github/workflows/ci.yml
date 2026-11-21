@@ -15,13 +15,13 @@ jobs:
       # Finkornig token med läsrätt till innehållet i tommysoder79-maker/agent-plattform.
       HAR_NYCKEL: ${{ secrets.AGENT_PLATTFORM_LASA != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Saknad läsnyckel
         if: env.HAR_NYCKEL != 'true'
         run: echo "::warning::Hemligheten AGENT_PLATTFORM_LASA saknas, så kontrakten valideras inte. Se README."
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: env.HAR_NYCKEL == 'true'
         with:
           repository: tommysoder79-maker/agent-plattform
