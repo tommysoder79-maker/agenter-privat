@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.AGENT_PLATTFORM_LASA }}
           path: .plattform
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: env.HAR_NYCKEL == 'true'
         with:
           python-version: "3.12"
