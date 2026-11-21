@@ -1,0 +1,5 @@
+# Registret över privata agenter. Valideras mot agent-plattform/schema/agentregister.schema.json.
+# En agent läggs till med skillen agent-kontrakt; en avvecklad agent står kvar med återkallade nycklar.
+schema_version: 1
+sfar: privat
+agenter: []

@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  kontroller:
+    runs-on: ubuntu-latest
+    env:
+      # Finkornig token med läsrätt till innehållet i tommysoder79-maker/agent-plattform.
+      HAR_NYCKEL: ${{ secrets.AGENT_PLATTFORM_LASA != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Saknad läsnyckel
+        if: env.HAR_NYCKEL != 'true'
+        run: echo "::warning::Hemligheten AGENT_PLATTFORM_LASA saknas, så kontrakten valideras inte. Se README."
+
+      - uses: actions/checkout@v4
+        if: env.HAR_NYCKEL == 'true'
+        with:
+          repository: tommysoder79-maker/agent-plattform
+          token: ${{ secrets.AGENT_PLATTFORM_LASA }}
+          path: .plattform
+
+      - uses: actions/setup-python@v5
+        if: env.HAR_NYCKEL == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Installera
+        if: env.HAR_NYCKEL == 'true'
+        run: pip install -r .plattform/requirements.txt
+
+      - name: Registret och kontrakten
+        if: env.HAR_NYCKEL == 'true'
+        run: >
+          python .plattform/scripts/validera_kontrakt.py
+          --register agentregister.yaml
+          --kallregister .plattform/kallregister/kallor.yaml
+          --kontrollera-sokvagar
